@@ -2,11 +2,11 @@
 
 ## The Problem
 
-[Google Antigravity IDE](https://antigravity.google.com) quotas operate on a **5-hour rolling window** (for Google AI Pro / Ultra users). If you use it at 10:00, your quota refreshes at 15:00. For intense coding sessions, this falls a bit short.
+[Google Antigravity IDE](https://antigravity.google) quotas operate on a **5-hour rolling window** (for Google AI Pro / Ultra users). If you use it at 10:00, your quota refreshes at 15:00. For intense coding sessions, this falls a bit short.
 
 ## The Solution
 
-Trigger "dummy" API calls hours **before** you work to start rolling window → quota refreshes mid-session.
+Trigger "dummy" API calls hours **before** you work to start rolling window → quota refreshes mid-session; this is what this repo is!
 
 ### Example Case - Comparison
 
