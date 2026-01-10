@@ -57,13 +57,12 @@ function formatDuration(ms) {
 }
 
 // =============================================================================
-// QuotaOptimizer Class
+// QuotaRefresher Class
 // =============================================================================
 
-class QuotaOptimizer {
+class QuotaRefresher {
     constructor(config) {
-        this.workStartTime = config.workStartTime; // "17:00"
-        this.refreshOffset = config.refreshOffset; // 2 (hours into work session to refresh)
+        this.triggerTime = config.triggerTime;     // "17:00" - when to trigger daily
         this.quotaCycle = config.quotaCycle;       // 5 (hours, the platform's cycle)
         this.timezone = config.timezone || dayjs.tz.guess(); // Auto-detect or use provided
         this.dryRun = config.dryRun || false;
@@ -71,23 +70,12 @@ class QuotaOptimizer {
     }
 
     /**
-     * Calculate the next trigger time based on configuration
-     * 
-     * Logic:
-     * - targetRefreshTime = workStart + refreshOffset
-     * - triggerTime = targetRefreshTime - quotaCycle
-     * 
-     * Edge cases handled:
-     * 1. If triggerTime is in the past but workStart is in the future -> trigger immediately
-     * 2. If both are in the past -> schedule for tomorrow
-     */
-    /**
      * Calculate the next trigger time
-     * User input (workStartTime) is treated as the designated TRIGGER time.
+     * User input (triggerTime) is treated as the designated TRIGGER time.
      */
     calculateTriggerTime() {
         const now = dayjs().tz(this.timezone);
-        const [hour, minute] = this.workStartTime.split(':').map(Number);
+        const [hour, minute] = this.triggerTime.split(':').map(Number);
 
         // Today's trigger time in the configured timezone
         let triggerTime = dayjs().tz(this.timezone).hour(hour).minute(minute).second(0).millisecond(0);
@@ -107,11 +95,11 @@ class QuotaOptimizer {
     }
 
     /**
-     * Start the optimizer scheduler
+     * Start the refresher scheduler
      */
     async start() {
         console.log("\n╔═══════════════════════════════════════════════════════════╗");
-        console.log("║                ANTIGRAVITY QUOTA OPTIMIZER                ║");
+        console.log("║                ANTIGRAVITY QUOTA REFRESHER                ║");
         console.log("╚═══════════════════════════════════════════════════════════╝\n");
 
         const now = dayjs();
@@ -120,12 +108,12 @@ class QuotaOptimizer {
         const sign = offsetHrs >= 0 ? '+' : '';
         const tzDisplay = `UTC ${sign}${offsetHrs}`;
 
-        const [startH, startM] = this.workStartTime.split(':').map(Number);
+        const [startH, startM] = this.triggerTime.split(':').map(Number);
         const refreshDate = dayjs().hour(startH).minute(startM).add(this.quotaCycle, 'hour');
         const refreshTimeStr = refreshDate.format('HH:mm');
 
         console.log("Configuration:");
-        console.log(`  Trigger Time:    ${this.workStartTime} (Daily)`);
+        console.log(`  Trigger Time:    ${this.triggerTime} (Daily)`);
         console.log(`  Quota Refresh:   est. ${refreshTimeStr}`);
         console.log(`  Timezone:        ${tzDisplay}`);
         console.log("");
@@ -171,11 +159,6 @@ class QuotaOptimizer {
             console.log(`  Waiting:         ${formatDuration(delay)}`);
         }
         console.log("");
-
-        if (this.dryRun) {
-            console.log("  [DRY RUN] Would trigger at the scheduled time. Exiting.\n");
-            return;
-        }
 
         if (this.dryRun) {
             console.log("  [DRY RUN] Would trigger at the scheduled time. Exiting.\n");
@@ -305,11 +288,6 @@ if (!isValidTimeFormat(config.triggerTime)) {
     process.exit(1);
 }
 
-// Adapt config for QuotaOptimizer (it expects workStartTime)
-// triggerTime = workStartTime - 0 offset (we trigger at the exact time, refresh 5h later)
-config.workStartTime = config.triggerTime;
-config.refreshOffset = 0; // Trigger immediately at triggerTime
-
-// Start the optimizer
-const optimizer = new QuotaOptimizer(config);
-optimizer.start();
+// Start the refresher
+const refresher = new QuotaRefresher(config);
+refresher.start();

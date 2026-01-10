@@ -122,21 +122,19 @@ Since your VPS likely doesn't have the Antigravity IDE, you must **export the to
 
 That's it. The script will:
 
-1. ✓ Test your API connection
-2. ✓ Ask for trigger time & timezone
-3. ✓ Start the container with auto-restart
+1. ✓ Ask for trigger time & timezone
+2. ✓ Start the container with auto-restart
+3. ✓ Test your API connection <- happens inside the container onStartup
 
-### Re-Deploy / Change Trigger Time
+> **Note:** To update your trigger schedule, simply re-run the deploy script at any time.
 
-```bash
-./deploy.sh
-```
-
-### Check Status
+### 4. Check Status (Optional)
 
 ```bash
 docker compose logs -f
 ```
+
+should be fine, is still a good idea to monitor whether the logs are healthy.
 
 ---
 
