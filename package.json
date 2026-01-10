@@ -1,0 +1,34 @@
+{
+  "name": "antigravity-quota-refresher",
+  "version": "1.0.0",
+  "description": "Automated scheduler to align Google Antigravity IDE quota refreshes with your work hours.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "trigger": "node src/trigger.js",
+    "export-token": "node src/trigger.js --export-token",
+    "health": "node src/tools/debug.js health"
+  },
+  "keywords": [
+    "antigravity",
+    "ide",
+    "google",
+    "gemini",
+    "quota",
+    "automation"
+  ],
+  "author": "louisleonid",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leonidlouis/antigravity-quota-refresher.git"
+  },
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.10",
+    "dotenv": "^17.2.3"
+  }
+}

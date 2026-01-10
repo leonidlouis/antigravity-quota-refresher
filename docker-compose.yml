@@ -1,0 +1,30 @@
+# ─────────────────────────────────────────────────────────────
+# Antigravity Quota Refresher - Docker Compose
+# ─────────────────────────────────────────────────────────────
+#
+# USAGE:
+#   ./deploy.sh              # Interactive setup
+#   ./deploy.sh 14:00        # Deploy with trigger at 14:00
+#
+# MANUAL:
+#   echo "ANTIGRAVITY_REFRESH_TOKEN=xxx" > .env
+#   echo "TRIGGER_TIME=12:00" >> .env
+#   docker-compose up -d
+# ─────────────────────────────────────────────────────────────
+
+services:
+  antigravity:
+    build: .
+    container_name: antigravity-refresher
+    environment:
+      - ANTIGRAVITY_REFRESH_TOKEN=${ANTIGRAVITY_REFRESH_TOKEN}
+      - TRIGGER_TIME=${TRIGGER_TIME:-12:00}
+      - TZ=${TZ:-UTC}
+    restart: unless-stopped
+
+    healthcheck:
+      test: [ "CMD", "pgrep", "-x", "node" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
