@@ -157,7 +157,7 @@ docker compose logs -f
 
 ## Disclaimer
 
-This tool is provided for educational and personal use only. Use of this repository **may or may not breach Google's Terms of Service**. The author assumes no responsibility for any consequences resulting from the use of this software. Use at your own risk.
+This tool is provided for educational and personal use only. The author assumes no responsibility for any consequences resulting from the use of this software. Use at your own risk.
 
 ## License
 
