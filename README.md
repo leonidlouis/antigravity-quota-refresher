@@ -25,18 +25,34 @@ cd antigravity-quota-refresher
 ```
 
 ### 2. Setup Token
+
+You need to extract your authentication token from the Antigravity IDE.
+
+#### Option A: Running Locally (Same machine as IDE)
+If you are running this on the same computer where you use Antigravity IDE:
+
 ```bash
-# Need Antigravity IDE installed and logged in.
-# Might need to install sqlite3 if not present.
-# sudo apt install sqlite3 // brew install sqlite3 // etc.
-./export-token.sh
+# 1. Extract the token
+sudo apt install sqlite3 && ./export-token.sh
+# (Or via NPM: npm install && npm run export-token)
 
-# OR using NPM
-npm install && npm run export-token
-
-# Copy the token, then create .env:
+# 2. Copy the token and save to .env
 echo "ANTIGRAVITY_REFRESH_TOKEN=your_token_here" > .env
 ```
+
+#### Option B: Running on VPS (Recommended 24/7)
+Since your VPS likely doesn't have the Antigravity IDE, you must **export the token from your local machine first**.
+
+1.  **On Local Machine**: 
+    ```bash
+    sudo apt install sqlite3 && ./export-token.sh
+    # (Or via NPM: npm install && npm run export-token)
+    ```
+2.  **On VPS**: 
+    ```bash
+    # Create .env with the copied token
+    echo "ANTIGRAVITY_REFRESH_TOKEN=paste_your_token_here" > .env
+    ```
 
 ### 3. Deploy
 ```bash
