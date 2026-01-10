@@ -83,17 +83,7 @@ docker compose logs -f
 | `docker compose logs` | View logs & status |
 | `./export-token.sh` | Export token (Unix) |
 | `npm run export-token` | Export token (NPM) |
-| `./deploy.sh` | Deploy (interactive) |
-
----
-
-## 🔐 Security
-
-> [!IMPORTANT]
-> **Never commit your token!**
-
-- `.env` files are gitignored
-- Docker images never bake in tokens
+| `./deploy.sh` | Deploy docker container for triggering rolling window (Interactive) |
 
 ---
 
@@ -101,4 +91,5 @@ docker compose logs -f
 [wusimpl/AntigravityQuotaWatcher](https://github.com/wusimpl/AntigravityQuotaWatcher) • [shekohex/opencode-google-antigravity-auth](https://github.com/shekohex/opencode-google-antigravity-auth)
 
 ## License
-MIT
+
+Distributed under the MIT License.
