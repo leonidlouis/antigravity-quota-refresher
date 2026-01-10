@@ -151,7 +151,7 @@ class QuotaRefresher {
         console.log(`SCHEDULER LOG`);
         console.log("─────────────────────────────────────────────────────────────");
         console.log(`  Next Trigger:    ${times.triggerTime.format('YYYY-MM-DD HH:mm')}`);
-        console.log(`  Quota Refresh:   ${times.refreshTime.format('YYYY-MM-DD HH:mm')} (approx)`);
+        console.log(`  Quota Refresh:   ${times.refreshTime.format('YYYY-MM-DD HH:mm')}`);
 
         const delay = Math.max(0, times.triggerTime.diff(now));
 

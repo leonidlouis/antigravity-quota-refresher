@@ -134,14 +134,16 @@ That's it. The script will:
 docker compose logs -f
 ```
 
-should be fine, is still a good idea to monitor whether the logs are healthy.
+It should be fine, but it is still a good idea to monitor whether the logs are healthy. A good startup looks like this:
+
+![Deploy Logs](docs/deploy-logs.png)
 
 ---
 
 ## 🔧 Commands
 
 | Command | Description |
-|---------|-------------|
+| --- | --- |
 | `docker compose logs -f` | View logs & status |
 | `./export-token.sh` | Export token (Unix) |
 | `npm run export-token` | Export token (NPM) |
