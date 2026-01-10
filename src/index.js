@@ -109,7 +109,7 @@ class QuotaOptimizer {
     /**
      * Start the optimizer scheduler
      */
-    start() {
+    async start() {
         console.log("\n╔═══════════════════════════════════════════════════════════╗");
         console.log("║                ANTIGRAVITY QUOTA OPTIMIZER                ║");
         console.log("╚═══════════════════════════════════════════════════════════╝\n");
@@ -130,7 +130,26 @@ class QuotaOptimizer {
         console.log(`  Timezone:        ${tzDisplay}`);
         console.log("");
 
+        // Run Health Check on Startup
+        await this.runHealthCheck();
+
         this.scheduleNext();
+    }
+
+    /**
+     * Run the health check in quiet mode
+     */
+    runHealthCheck() {
+        return new Promise(resolve => {
+            const debugScript = path.join(__dirname, 'tools', 'debug.js');
+            exec(`node "${debugScript}" health --quiet`, (error, stdout, stderr) => {
+                if (stdout && stdout.trim()) {
+                    console.log(stdout.trim());
+                    console.log(""); // Add spacing
+                }
+                resolve();
+            });
+        });
     }
 
     /**

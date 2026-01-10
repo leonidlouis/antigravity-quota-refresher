@@ -169,49 +169,66 @@ async function cmdEndpoints() {
 
 /**
  * Run a full health check
+ * @param {boolean} quiet - If true, only output summary
  */
-async function cmdHealth() {
-    console.log('🏥 Running Health Check...\n');
+async function cmdHealth(quiet = false) {
+    if (!quiet) console.log('🏥 Running Health Check...\n');
+
+    let allWorking = true;
 
     // 1. Token
-    console.log('1. Token Retrieval:');
+    if (!quiet) console.log('1. Token Retrieval:');
+    let accessToken = null;
     try {
         const refreshToken = await getRefreshToken();
-        console.log('   ✓ Refresh token obtained');
+        if (!quiet) console.log('   ✓ Refresh token obtained');
 
-        const accessToken = await getAccessToken(refreshToken);
-        console.log('   ✓ Access token generated\n');
+        accessToken = await getAccessToken(refreshToken);
+        if (!quiet) console.log('   ✓ Access token generated\n');
 
         // 2. Endpoints
-        console.log('2. Endpoint Connectivity:');
+        if (!quiet) console.log('2. Endpoint Connectivity:');
         let workingCount = 0;
         for (const ep of ENDPOINTS) {
-            process.stdout.write(`   ${ep.split('//')[1].split('.')[0]}... `);
+            if (!quiet) process.stdout.write(`   ${ep.split('//')[1].split('.')[0]}... `);
             try {
                 const res = await httpRequest('POST', `${ep}/v1internal:loadCodeAssist`,
                     { ...HEADERS, 'Authorization': `Bearer ${accessToken}` },
                     { metadata: { ideType: 'ANTIGRAVITY' } }
                 );
                 if (res.statusCode === 200) {
-                    console.log('✓');
+                    if (!quiet) console.log('✓');
                     workingCount++;
                 } else {
-                    console.log(`✗ (${res.statusCode})`);
+                    if (!quiet) console.log(`✗ (${res.statusCode})`);
                 }
             } catch (e) {
-                console.log(`✗ (${e.message})`);
+                if (!quiet) console.log(`✗ (${e.message})`);
             }
         }
-        console.log(`   ${workingCount}/${ENDPOINTS.length} endpoints working\n`);
 
-        // 3. Summary
-        console.log('3. Summary:');
-        console.log(`   Status: ${workingCount > 0 ? '✓ HEALTHY' : '✗ UNHEALTHY'}`);
+        if (workingCount === 0) allWorking = false;
+
+        if (!quiet) {
+            console.log(`   ${workingCount}/${ENDPOINTS.length} endpoints working\n`);
+            console.log('3. Summary:');
+            console.log(`   Status: ${workingCount > 0 ? '✓ HEALTHY' : '✗ UNHEALTHY'}`);
+        } else {
+            if (workingCount > 0) {
+                console.log("Health Check: Finished - all systems working ✓");
+            } else {
+                console.log("Health Check: Failed - no endpoints working ✗");
+            }
+        }
 
     } catch (e) {
-        console.log(`   ✗ ${e.message}\n`);
-        console.log('3. Summary:');
-        console.log('   Status: ✗ UNHEALTHY (Token Error)');
+        if (!quiet) {
+            console.log(`   ✗ ${e.message}\n`);
+            console.log('3. Summary:');
+            console.log('   Status: ✗ UNHEALTHY (Token Error)');
+        } else {
+            console.log(`Health Check: Failed - ${e.message} ✗`);
+        }
     }
 }
 
@@ -243,6 +260,11 @@ Examples:
 
 async function main() {
     const args = process.argv.slice(2);
+    // Extract quiet flag
+    const quietIndex = args.findIndex(a => a === '--quiet' || a === '-q');
+    const quiet = quietIndex !== -1;
+    if (quiet) args.splice(quietIndex, 1); // Remove flag to cleanly get command
+
     const command = args[0]?.toLowerCase();
 
     if (!command || command === '--help' || command === '-h') {
@@ -262,7 +284,7 @@ async function main() {
                 await cmdEndpoints();
                 break;
             case 'health':
-                await cmdHealth();
+                await cmdHealth(quiet);
                 break;
             default:
                 console.error(`Unknown command: ${command}`);

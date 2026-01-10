@@ -7,7 +7,8 @@
     "start": "node src/index.js",
     "trigger": "node src/trigger.js",
     "export-token": "node src/trigger.js --export-token",
-    "health": "node src/tools/debug.js health"
+    "health": "node src/tools/debug.js health",
+    "health-quiet": "node src/tools/debug.js health --quiet"
   },
   "keywords": [
     "antigravity",
