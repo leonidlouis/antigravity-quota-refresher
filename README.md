@@ -138,6 +138,8 @@ It should be fine, but it is still a good idea to monitor whether the logs are h
 
 ![Deploy Logs](docs/deploy-logs.png)
 
+Done! everyday on _[your configured time]_, your Antigravity Quota rolling window should be started.
+
 ---
 
 ## 🔧 Commands
