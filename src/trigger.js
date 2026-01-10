@@ -18,6 +18,7 @@ const https = require('https');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const crypto = require('crypto');
 
 // Load .env only if present (suppress logs)
 const envPath = path.join(__dirname, '..', '.env');
@@ -42,6 +43,14 @@ const {
 // =============================================================================
 // Helpers
 // =============================================================================
+
+function generateRequestId() {
+    return crypto.randomUUID();
+}
+
+function buildSignatureSessionKey(sessionId, model, project) {
+    return `${sessionId}:${model}:${project}`;
+}
 
 // =============================================================================
 // Core Logic
