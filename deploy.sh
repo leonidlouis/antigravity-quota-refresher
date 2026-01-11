@@ -168,6 +168,48 @@ echo "✓ Trigger time: $TRIGGER_TIME"
 echo "  → Quota will refresh at $REFRESH_DISPLAY"
 
 # ─────────────────────────────────────────────────────────────
+# Step 3b: Telegram Notifications (Optional)
+# ─────────────────────────────────────────────────────────────
+
+# Check if already configured
+EXISTING_TG_TOKEN=$(grep "^TELEGRAM_BOT_TOKEN=" .env 2>/dev/null | cut -d= -f2)
+
+if [ -z "$EXISTING_TG_TOKEN" ]; then
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Telegram Notifications (Optional)"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "  Get notified when quota triggers fire."
+    echo ""
+    read -p "Enable Telegram notifications? (y/N): " ENABLE_TG
+    
+    if [[ "$ENABLE_TG" =~ ^[Yy]$ ]]; then
+        echo ""
+        echo "  1. Message @BotFather on Telegram → /newbot"
+        echo "  2. Copy the bot token"
+        read -p "     Paste bot token: " TG_TOKEN
+        
+        echo ""
+        echo "  3. Start a chat with your new bot"  
+        echo "  4. Visit: https://api.telegram.org/bot${TG_TOKEN}/getUpdates"
+        echo "  5. Find your chat ID in the response"
+        read -p "     Paste chat ID: " TG_CHAT_ID
+        
+        if [ -n "$TG_TOKEN" ] && [ -n "$TG_CHAT_ID" ]; then
+            echo "TELEGRAM_BOT_TOKEN=$TG_TOKEN" >> .env
+            echo "TELEGRAM_CHAT_ID=$TG_CHAT_ID" >> .env
+            echo ""
+            echo "✓ Telegram configured"
+        fi
+    else
+        echo "  Skipping Telegram setup."
+    fi
+else
+    echo ""
+    echo "✓ Telegram: Already configured"
+fi
+
+# ─────────────────────────────────────────────────────────────
 # Step 4: Save config to .env
 # ─────────────────────────────────────────────────────────────
 

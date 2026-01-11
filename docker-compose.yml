@@ -20,6 +20,8 @@ services:
       - ANTIGRAVITY_REFRESH_TOKEN=${ANTIGRAVITY_REFRESH_TOKEN}
       - TRIGGER_TIME=${TRIGGER_TIME:-12:00}
       - TZ=${TZ:-UTC}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
     restart: unless-stopped
 
     healthcheck:

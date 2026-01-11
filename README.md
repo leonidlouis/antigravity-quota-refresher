@@ -163,6 +163,37 @@ Done! everyday on _[your configured time]_, your Antigravity Quota rolling windo
 
 ---
 
+## 📱 Telegram Notifications (Optional)
+
+Get notified on your phone when quota triggers fire.
+
+### Setup
+
+1. **Create Bot**: Message [@BotFather](https://t.me/botfather) on Telegram → `/newbot` → copy token
+2. **Get Chat ID**:
+   - Start a conversation with your new bot (send any message)
+   - Visit: `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
+   - Find `"chat":{"id":123456789}` in the response — that's your Chat ID
+3. **Configure**:
+
+   ```bash
+   echo "TELEGRAM_BOT_TOKEN=your_token" >> .env
+   echo "TELEGRAM_CHAT_ID=your_chat_id" >> .env
+   ```
+
+4. **Redeploy**: `./deploy.sh`
+
+> 💡 The deploy script will also prompt you to set this up interactively.
+
+### What You'll Receive
+
+| Event      | Message                                               |
+|------------|-------------------------------------------------------|
+| ✅ Success | "Quota Triggered - Refresh at 12:00"                  |
+| ❌ Failure | "Quota Trigger FAILED - Manual intervention required" |
+
+---
+
 ## Issues
 
 Found a bug or have a suggestion? [Open an issue](https://github.com/leonidlouis/antigravity-quota-refresher/issues)!

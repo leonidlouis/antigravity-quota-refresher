@@ -39,6 +39,7 @@ const {
     sleep,
     execAsync
 } = require('./lib/auth');
+const telegram = require('./lib/telegram');
 
 // =============================================================================
 // Helpers
@@ -411,17 +412,8 @@ async function main() {
                     const result = await triggerQuota(ep, accessToken, projectId, pool.triggerId);
 
                     if (result.status === 429 || result.status == '429') {
-                        console.log('✗ FAILED (429) - Quota Exhausted for this model.');
-                        console.log('   --- HEADERS ---');
-                        console.log(JSON.stringify(result.headers, null, 2).replace(/^/gm, '   '));
-                        console.log('   --- BODY ---');
-                        try {
-                            const bodyToPrint = result.body || JSON.parse(result.raw);
-                            console.log(JSON.stringify(bodyToPrint, null, 2).replace(/^/gm, '   '));
-                        } catch (e) {
-                            console.log(result.raw ? result.raw.replace(/^/gm, '   ') : '   (No Body)');
-                        }
-                        console.log('   (Continuing to next model...)');
+                        console.log('✗ (429) Quota Exhausted');
+                        // Continue to next model
                         // DO NOT break. Try next model!
                     } else if (result.success) {
                         console.log('✓ OK');
@@ -455,6 +447,27 @@ async function main() {
 
             // Success (at least one worked or was full)
             console.log('\n✓ Done. Quota triggers processed successfully.');
+
+            // Send Telegram notification with quota info
+            const now = new Date();
+            const triggerTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            const refreshTime = new Date(now.getTime() + 5 * 60 * 60 * 1000)
+                .toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+            // Build quota status lines
+            const quotaLines = models.map(m => `• ${m.id}: ${m.remaining}`).join('\n');
+            const allFull = models.every(m => m.remainingValue >= 99.5);
+
+            let message = `✅ Antigravity quota usage triggered at ${triggerTime}\n\n`;
+            message += `📊 Quota before trigger:\n${quotaLines}\n\n`;
+            message += `5hr rolling window started.\n`;
+            if (allFull) {
+                message += `Will be fully refreshed at ${refreshTime}`;
+            } else {
+                message += `Partial refresh expected (not all pools were at 100%)`;
+            }
+
+            await telegram.send(message);
             return;
         }
 
@@ -462,6 +475,7 @@ async function main() {
 
     } catch (e) {
         console.error(`\nFATAL ERROR: ${e.message}`);
+        await telegram.send(`❌ Antigravity quota trigger FAILED\n\n${e.message}\n\nManual intervention required.`);
         process.exit(1);
     }
 }
