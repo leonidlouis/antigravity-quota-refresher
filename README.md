@@ -19,6 +19,7 @@ gantt
     title Without Refresher
     dateFormat HH:mm
     axisFormat %H:%M
+    todayMarker off
 
     section Quota
     Quota Rolling Window (5h)                :crit, 10:00, 5h
@@ -42,6 +43,7 @@ gantt
     title With Refresher
     dateFormat HH:mm
     axisFormat %H:%M
+    todayMarker off
 
     section Bucket 1
     ⚡ API Trigger Fires                     :milestone, t1, 07:00, 0d
@@ -134,9 +136,15 @@ That's it. The script will:
 docker compose logs -f
 ```
 
-It should be fine, but it is still a good idea to monitor whether the logs are healthy. A good startup looks like this:
+It should be fine, but it is still a good idea to monitor whether the logs are healthy.
+
+A good startup looks like this:
 
 ![Deploy Logs](docs/deploy-logs.png)
+
+A good cron / scheduler trigger looks like this:
+
+![Trigger](docs/trigger-execution.png)
 
 Done! everyday on _[your configured time]_, your Antigravity Quota rolling window should be started.
 
@@ -153,7 +161,13 @@ Done! everyday on _[your configured time]_, your Antigravity Quota rolling windo
 
 ---
 
-## **Credits:**
+## Issues
+
+Found a bug or have a suggestion? [Open an issue](https://github.com/leonidlouis/antigravity-quota-refresher/issues)!
+
+---
+
+## Credits
 
 [wusimpl/AntigravityQuotaWatcher](https://github.com/wusimpl/AntigravityQuotaWatcher) • [shekohex/opencode-google-antigravity-auth](https://github.com/shekohex/opencode-google-antigravity-auth)
 
