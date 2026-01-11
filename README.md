@@ -83,11 +83,13 @@ git clone https://github.com/leonidlouis/antigravity-quota-refresher.git
 cd antigravity-quota-refresher
 ```
 
-### 2. Setup Token
+### 2. Setup
+
+#### 2a. Authentication Token (Required)
 
 You need to extract your authentication token from the Antigravity IDE.
 
-#### Option A: Running Locally (Same machine as IDE)
+**Option A: Running Locally (Same machine as IDE)**
 
 If you are running this on the same computer where you use Antigravity IDE:
 
@@ -100,7 +102,7 @@ sudo apt install sqlite3 && ./export-token.sh
 echo "ANTIGRAVITY_REFRESH_TOKEN=your_token_here" > .env
 ```
 
-#### Option B: Running on VPS (Recommended 24/7)
+**Option B: Running on VPS (Recommended 24/7)**
 
 Since your VPS likely doesn't have the Antigravity IDE, you must **export the token from your local machine first**.
 
@@ -118,6 +120,24 @@ Since your VPS likely doesn't have the Antigravity IDE, you must **export the to
     echo "ANTIGRAVITY_REFRESH_TOKEN=paste_your_token_here" > .env
     ```
 
+#### 2b. Telegram Notifications (Optional)
+
+Get notified on your phone when triggers fire.
+
+1. **Create Bot**: Message [@BotFather](https://t.me/botfather) on Telegram → `/newbot` → copy token
+2. **Get Chat ID**:
+   - Start a conversation with your new bot (send any message)
+   - Visit: `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
+   - Find `"chat":{"id":123456789}` in the response — that's your Chat ID
+3. **Add to .env**:
+
+   ```bash
+   echo "TELEGRAM_BOT_TOKEN=your_bot_token" >> .env
+   echo "TELEGRAM_CHAT_ID=your_chat_id" >> .env
+   ```
+
+> 💡 The deploy script will also prompt you to set this up interactively.
+
 ### 3. Deploy
 
 ```bash
@@ -127,8 +147,9 @@ Since your VPS likely doesn't have the Antigravity IDE, you must **export the to
 That's it. The script will:
 
 1. ✓ Ask for trigger time & timezone
-2. ✓ Start the container with auto-restart
-3. ✓ Test your API connection <- happens inside the container onStartup
+2. ✓ Optionally set up Telegram (if not already configured)
+3. ✓ Start the container with auto-restart
+4. ✓ Test your API connection ← happens inside the container on startup
 
 > **Note:** To update your trigger schedule, simply re-run the deploy script at any time.
 
@@ -163,34 +184,46 @@ Done! everyday on _[your configured time]_, your Antigravity Quota rolling windo
 
 ---
 
-## 📱 Telegram Notifications (Optional)
+## 📱 Telegram Notifications
 
-Get notified on your phone when quota triggers fire.
+What you'll receive when triggers fire:
 
-### Setup
+**All pools at 100%:**
 
-1. **Create Bot**: Message [@BotFather](https://t.me/botfather) on Telegram → `/newbot` → copy token
-2. **Get Chat ID**:
-   - Start a conversation with your new bot (send any message)
-   - Visit: `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
-   - Find `"chat":{"id":123456789}` in the response — that's your Chat ID
-3. **Configure**:
+```text
+✅ Antigravity quota usage triggered at 12:00
 
-   ```bash
-   echo "TELEGRAM_BOT_TOKEN=your_token" >> .env
-   echo "TELEGRAM_CHAT_ID=your_chat_id" >> .env
-   ```
+📊 Quota before trigger:
+• Gemini 3 Pro: 100.00%
+• Gemini 3 Flash: 100.00%
+• Claude: 100.00%
 
-4. **Redeploy**: `./deploy.sh`
+5hr rolling window started.
+Will be fully refreshed at 17:00
+```
 
-> 💡 The deploy script will also prompt you to set this up interactively.
+**Some pools already in use:**
 
-### What You'll Receive
+```text
+5hr rolling window started.
+Partial refresh expected (not all pools were at 100%)
+```
 
-| Event      | Message                                               |
-|------------|-------------------------------------------------------|
-| ✅ Success | "Quota Triggered - Refresh at 12:00"                  |
-| ❌ Failure | "Quota Trigger FAILED - Manual intervention required" |
+**All pools already in active cycle:**
+
+```text
+All pools already in active cycle — skipped.
+```
+
+**On failure:**
+
+```text
+❌ Antigravity quota trigger FAILED
+
+All endpoints failed or are rate-limited.
+
+Manual intervention required.
+```
 
 ---
 
