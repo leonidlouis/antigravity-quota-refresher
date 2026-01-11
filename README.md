@@ -6,7 +6,9 @@
 
 ## The Solution
 
-Trigger "dummy" API calls hours **before** you work to start rolling window → quota refreshes mid-session; this is what this repo is!
+Send (automated) minimal LLM prompts to all 3 quota pools (Gemini 3 Pro, Gemini 3 Flash, and Claude) hours **before** you work to start the rolling windows → quota refreshes mid-session.
+
+> 💡 Each prompt consumes less than 0.5% of its pool's quota.
 
 ### Example Case - Comparison
 
