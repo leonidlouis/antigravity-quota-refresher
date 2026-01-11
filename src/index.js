@@ -196,7 +196,7 @@ class QuotaRefresher {
                 }
                 console.log(`  ✓  Trigger successful!`);
                 const refreshTime = dayjs().tz(this.timezone).add(this.quotaCycle, 'hour').format('HH:mm');
-                console.log(`\n  ⏰ Quota will refresh in ${this.quotaCycle} hours at ${refreshTime}`);
+                console.log(`\n  ⏰ Quota will refresh in ${this.quotaCycle} hours at est. ${refreshTime}`);
                 return;
             } catch (error) {
                 console.error(`  ✗  Attempt ${attempt}/${MAX_RETRIES} failed: ${error.message}`);

@@ -457,14 +457,17 @@ async function main() {
             // Build quota status lines
             const quotaLines = models.map(m => `• ${m.id}: ${m.remaining}`).join('\n');
             const allFull = models.every(m => m.remainingValue >= 99.5);
+            const noneFull = models.every(m => m.remainingValue < 99.5);
 
             let message = `✅ Antigravity quota usage triggered at ${triggerTime}\n\n`;
             message += `📊 Quota before trigger:\n${quotaLines}\n\n`;
-            message += `5hr rolling window started.\n`;
-            if (allFull) {
-                message += `Will be fully refreshed at ${refreshTime}`;
+
+            if (noneFull) {
+                message += `All pools already in active cycle — skipped.`;
+            } else if (allFull) {
+                message += `5hr rolling window started.\nWill be fully refreshed at ${refreshTime}`;
             } else {
-                message += `Partial refresh expected (not all pools were at 100%)`;
+                message += `5hr rolling window started.\nPartial refresh expected (not all pools were at 100%)`;
             }
 
             await telegram.send(message);
