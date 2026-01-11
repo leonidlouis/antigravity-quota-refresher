@@ -40,12 +40,12 @@ async function send(message) {
         });
 
         if (res.statusCode !== 200 || !res.body?.ok) {
-            console.warn(`  ⚠ Telegram: ${res.body?.description || res.statusCode}`);
+            console.warn(`⚠ Telegram: ${res.body?.description || res.statusCode}`);
         } else {
-            console.log(`  📱 Telegram notification sent`);
+            console.log(`✓ Telegram notification sent`);
         }
     } catch (err) {
-        console.warn(`  ⚠ Telegram error: ${err.message}`);
+        console.warn(`⚠ Telegram error: ${err.message}`);
     }
 }
 
