@@ -249,17 +249,9 @@ Found a bug or have a suggestion? [Open an issue](https://github.com/leonidlouis
 
 [wusimpl/AntigravityQuotaWatcher](https://github.com/wusimpl/AntigravityQuotaWatcher) • [shekohex/opencode-google-antigravity-auth](https://github.com/shekohex/opencode-google-antigravity-auth)
 
-## ⚠️ WARNING - READ BEFORE USING
+## Disclaimer
 
-**This tool violates Google's Terms of Service.** By using this script, you risk:
-
-- **Account bans** — Google has been actively banning users who use automated tools to manipulate quotas
-- **Quota revocation** — Permanent removal of Antigravity access
-- **IP blocks** — Your IP or network may be flagged
-
-**This tool is provided as-is, with no support.** The author assumes no responsibility for any consequences, including account bans or legal action from Google.
-
-**If you are still using this tool, stop now.** Don't learn the hard way like others did.
+This tool is provided for educational and personal use only. The author assumes no responsibility for any consequences resulting from the use of this software. Use at your own risk.
 
 ## License
 
