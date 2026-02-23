@@ -1,3 +1,15 @@
+# ⚠️ DEPRECATED - DO NOT USE
+
+> **This tool is no longer maintained and is dangerous to use.**
+> 
+> Using this script violates **Google's Terms of Service** for Antigravity IDE. Users have been **banned** as a result of using automated quota manipulation tools like this one.
+> 
+> See: https://x.com/steipete/status/2025743825126273066
+> 
+> **Use at your own risk. You've been warned.**
+
+---
+
 # Antigravity Quota Refresher
 
 ## The Problem
@@ -237,9 +249,17 @@ Found a bug or have a suggestion? [Open an issue](https://github.com/leonidlouis
 
 [wusimpl/AntigravityQuotaWatcher](https://github.com/wusimpl/AntigravityQuotaWatcher) • [shekohex/opencode-google-antigravity-auth](https://github.com/shekohex/opencode-google-antigravity-auth)
 
-## Disclaimer
+## ⚠️ WARNING - READ BEFORE USING
 
-This tool is provided for educational and personal use only. The author assumes no responsibility for any consequences resulting from the use of this software. Use at your own risk.
+**This tool violates Google's Terms of Service.** By using this script, you risk:
+
+- **Account bans** — Google has been actively banning users who use automated tools to manipulate quotas
+- **Quota revocation** — Permanent removal of Antigravity access
+- **IP blocks** — Your IP or network may be flagged
+
+**This tool is provided as-is, with no support.** The author assumes no responsibility for any consequences, including account bans or legal action from Google.
+
+**If you are still using this tool, stop now.** Don't learn the hard way like others did.
 
 ## License
 
